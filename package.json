@@ -23,5 +23,11 @@
     "babel": "^5.8.23",
     "mocha": "^2.3.3",
     "rimraf": "^2.4.3"
-  }
+  },
+  "files": [
+    "README.md",
+    "package.json",
+    "bin",
+    "lib"
+  ]
 }

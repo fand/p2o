@@ -5,7 +5,9 @@
   "main": "src/p2o.js",
   "bin": "./bin/cli.js",
   "scripts": {
-    "test": "$(npm bin)/mocha test"
+    "test": "$(npm bin)/mocha test",
+    "build": "$(npm bin)/babel src --out-dir lib",
+    "clean": "$(npm bin)/rimraf lib"
   },
   "author": "fand",
   "license": "MIT",
@@ -14,6 +16,8 @@
     "promisify-node": "^0.2.1"
   },
   "devDependencies": {
-    "mocha": "^2.3.3"
+    "babel": "^5.8.23",
+    "mocha": "^2.3.3",
+    "rimraf": "^2.4.3"
   }
 }

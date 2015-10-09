@@ -1,7 +1,7 @@
 {
   "name": "p2o",
   "description": "Generates OPML from package.json",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "author": "fand",
   "bin": "./bin/cli.js",
   "bugs": {

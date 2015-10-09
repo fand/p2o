@@ -1,19 +1,49 @@
 {
   "name": "p2o",
-  "version": "0.0.5",
   "description": "Generates OPML from package.json",
-  "main": "src/p2o.js",
-  "bin": "./bin/cli.js",
-  "scripts": {
-    "test": "$(npm bin)/mocha test"
-  },
+  "version": "0.0.5",
   "author": "fand",
-  "license": "MIT",
+  "bin": "./bin/cli.js",
+  "bugs": {
+    "url": "https://github.com/fand/p2o/issues"
+  },
   "dependencies": {
     "mustache": "^2.1.3",
     "promisify-node": "^0.2.1"
   },
   "devDependencies": {
-    "mocha": "^2.3.3"
+    "babel": "^5.8.23",
+    "mocha": "^2.3.3",
+    "rimraf": "^2.4.3"
+  },
+  "files": [
+    "README.md",
+    "package.json",
+    "bin",
+    "lib"
+  ],
+  "homepage": "https://github.com/fand/p2o",
+  "keywords": [
+    "dependency",
+    "deps",
+    "feed",
+    "opml",
+    "package.json",
+    "rss"
+  ],
+  "license": "MIT",
+  "main": "src/p2o.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fand/p2o.git"
+  },
+  "scripts": {
+    "build": "$(npm bin)/babel src --out-dir lib",
+    "clean": "$(npm bin)/rimraf lib",
+    "postversion": "git push && git push --tags && npm run clean",
+    "prepublish": "npm run clean && npm run build",
+    "preversion": "npm run clean && npm run check",
+    "test": "$(npm bin)/mocha test",
+    "version": "npm run build"
   }
 }

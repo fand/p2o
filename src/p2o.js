@@ -1,19 +1,20 @@
 'use strict';
 
-var promisify = require("promisify-node");
-var npm       = require('npm');
-var fs        = promisify('fs');
-var Mustache  = require('mustache');
+import promisify from 'promisify-node';
+import npm       from 'npm';
+import Mustache  from 'mustache';
+
+const fs = promisify('fs');
 
 /**
  * Extract package data from given 'package.json'.
  * @param {string} jsonPath
  * @return {object}
  */
-var readPackageJson = function (jsonPath) {
+const readPackageJson = (jsonPath) => {
   return fs.readFile(jsonPath, 'utf8')
-    .then(function (file) {
-      var pack = JSON.parse(file);
+    .then((file) => {
+      const pack = JSON.parse(file);
       return {
         package  : pack,
         proDeps  : pack.dependencies || {},
@@ -34,20 +35,18 @@ var readPackageJson = function (jsonPath) {
  * Init npm engine.
  * @return {Promise}
  */
-var loadNpm = function () {
-  return promisify(npm.load)({});
-};
+const loadNpm = () => promisify(npm.load)({});
 
 /**
  * Fetch repositories' info from deps list.
  * @param {Array<dep>} deps
  * @return {Promise<Repo>}
  */
-var depsToRepos = function (deps) {
-  return Promise.all(Object.keys(deps).map(function (depName) {
+const depsToRepos = (deps) => {
+  return Promise.all(Object.keys(deps).map((depName) => {
     return promisify(npm.commands.view)([depName, 'repository'], true)
-      .then(function (info) {
-        var latestVersion = Object.keys(info)[0];
+      .then((info) => {
+        const latestVersion = Object.keys(info)[0];
         return info[latestVersion].repository;
       });
   }));
@@ -58,22 +57,23 @@ var depsToRepos = function (deps) {
  * @param {Array<Repo>} repos
  * @return {Array<Feed>}
  */
-var reposToFeed = function (repos) {
-  return repos.filter(function (repo) {
+const reposToFeed = (repos) => {
+  return repos.filter((repo) => {
     if (repo.type !== 'git') { return false; }
     if (! /github\.com.*\.git$/.test(repo.url)) { return false; }
     return true;
-  }).map(function (repo) {
-    var m = repo.url.match(/github\.com[\/\:](.*)\/(.*)\.git$/);
-    var userName = m[1];
-    var repoName = m[2];
-    var htmlUrl = 'https://github.com/' + userName + '/' + repoName;
-    var xmlUrl = htmlUrl + '/releases.atom';
+  }).map((repo) => {
+    const m       = repo.url.match(/github\.com[\/\:](.*)\/(.*)\.git$/);
+    const author  = m[1];
+    const title   = m[2];
+    const htmlUrl = `https://github.com/${author}/${title}`;
+    const xmlUrl  = `${htmlUrl}/releases.atom`;
 
     return {
-      title   : repoName,
-      htmlUrl : htmlUrl,
-      xmlUrl  : xmlUrl,
+      author,
+      title,
+      htmlUrl,
+      xmlUrl,
     };
   });
 };
@@ -83,14 +83,10 @@ var reposToFeed = function (repos) {
  * @param {object} data
  * @param {string} outputFilePath
  */
-var renderOPML = function (data, outputFilePath) {
-  return fs.readFile(__dirname + '/template.xml', 'utf8')
-    .then(function (template) {
-      return Mustache.render(template, data);
-    })
-    .then(function (outputData) {
-      return fs.writeFile(outputFilePath, outputData, 'utf8');
-    });
+const renderOPML = (data, outputFilePath) => {
+  return fs.readFile(`${__dirname}/template.xml`, 'utf8')
+    .then((template) => Mustache.render(template, data))
+    .then((outputData) => fs.writeFile(outputFilePath, outputData, 'utf8'));
 };
 
 /**
@@ -99,7 +95,7 @@ var renderOPML = function (data, outputFilePath) {
  * @param {Array<Repo>} proRepos
  * @param {Array<Repo>} devRepos
  */
-var reposForMode = function (mode, proRepos, devRepos) {
+const reposForMode = (mode, proRepos, devRepos) => {
   if (mode === 'all') {
     return proRepos.concat(devRepos);
   }
@@ -118,33 +114,29 @@ var reposForMode = function (mode, proRepos, devRepos) {
  * @param {string} mode
  * @return {Promise}
  */
-module.exports = function (packageFilePath, outputFilePath, mode) {
+const p2o = (packageFilePath, outputFilePath, mode) => {
 
   var pkg;
 
   return readPackageJson(packageFilePath)
-    .then(function (res) {
-      pkg = res;
-    })
+    .then(res => pkg = res)
     .then(loadNpm)
-    .then(function () {
+    .then(() => {
       var proRepos = depsToRepos(pkg.proDeps);
       var devRepos = depsToRepos(pkg.devDeps);
 
-      return Promise.all([proRepos, devRepos]).then(function (repos) {
+      return Promise.all([proRepos, devRepos]).then((repos) => {
         pkg.proRepos = repos[0];
         pkg.devRepos = repos[1];
       });
     })
-    .then(function () {
+    .then(() => {
       var repos = reposForMode(mode, pkg.proRepos, pkg.devRepos);
       pkg.view.feeds = reposToFeed(repos);
     })
-    .then(function () {
-      return renderOPML(pkg.view, outputFilePath);
-    })
-    .catch(function (err) {
-      throw err;
-    });
+    .then(() => renderOPML(pkg.view, outputFilePath))
+    .catch(err => { throw err; });
 
 };
+
+export default p2o;

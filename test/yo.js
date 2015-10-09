@@ -1,7 +1,7 @@
 'use strict';
 
 var assert    = require('assert');
-var p2o       = require('../src/index');
+var p2o       = require('../src/p2o');
 var promisify = require("promisify-node");
 var fs        = promisify('fs');
 

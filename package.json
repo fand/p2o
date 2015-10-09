@@ -2,7 +2,7 @@
   "name": "p2o",
   "version": "0.0.5",
   "description": "Generates OPML from package.json",
-  "main": "index.js",
+  "main": "src/p2o.js",
   "bin": "./bin/cli.js",
   "scripts": {
     "test": "$(npm bin)/mocha test"

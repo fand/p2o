@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var p2o = require('../src/index');
+var p2o = require('../src/p2o');
 
 var packageFilePath = process.argv[2];
 var outputFilePath  = process.argv[3];

@@ -20,7 +20,8 @@
     "README.md",
     "package.json",
     "bin",
-    "lib"
+    "lib",
+    ".template.xml"
   ],
   "homepage": "https://github.com/fand/p2o",
   "keywords": [

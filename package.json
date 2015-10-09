@@ -42,7 +42,7 @@
     "clean": "$(npm bin)/rimraf lib",
     "postversion": "git push && git push --tags && npm run clean",
     "prepublish": "npm run clean && npm run build",
-    "preversion": "npm run clean && npm run check",
+    "preversion": "npm run clean && npm run test",
     "test": "$(npm bin)/mocha test",
     "version": "npm run build"
   }

@@ -1,23 +1,24 @@
 'use strict';
 
-var assert    = require('assert');
-var p2o       = require('../src/p2o');
-var promisify = require("promisify-node");
-var fs        = promisify('fs');
+import assert    from 'assert';
+import p2o       from '../src/p2o';
+import promisify from 'promisify-node';
 
-describe('p2o', function () {
-  it('should generate correct XML file', function (done) {
-    var src = __dirname + '/yo.json';
-    var dst = __dirname + '/result.xml';
-    var exp = __dirname + '/yo.xml';
+const fs = promisify('fs');
 
-    p2o(src, dst, 'all').then(function () {
-      return Promise.all(
+describe('p2o', () => {
+  it('should generate correct XML file', (done) => {
+    const src = `${__dirname}/yo.json`;
+    const dst = `${__dirname}/result.xml`;
+    const exp = `${__dirname}/yo.xml`;
+
+    p2o(src, dst, 'all').then(() =>
+      Promise.all(
         fs.readFile(dst),
         fs.readFile(exp)
-      );
-    })
-    .then(function (files) {
+      )
+    )
+    .then((files) => {
       assert.equal(files[0], files[1]);
     })
     .finally(done);

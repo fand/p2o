@@ -1,12 +1,16 @@
-'use strict';
+#!/usr/bin/env node
 
-// Usage : node src/index.js package.json out.xml
-
-var p2o = require('../src/index');
+var p2o = require('p2o');
 
 var packageFilePath = process.argv[2];
 var outputFilePath  = process.argv[3];
 
 var mode = 'all';
+
+if (! (packageFilePath && outputFilePath)) {
+  console.log('Usage:');
+  console.log('    $ p2o <package.json> <outputFile>');
+  process.exit();
+}
 
 p2o(packageFilePath, outputFilePath, mode);

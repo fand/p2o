@@ -7,7 +7,11 @@
   "scripts": {
     "test": "$(npm bin)/mocha test",
     "build": "$(npm bin)/babel src --out-dir lib",
-    "clean": "$(npm bin)/rimraf lib"
+    "clean": "$(npm bin)/rimraf lib",
+    "preversion": "npm run clean && npm run check",
+    "version": "npm run build",
+    "postversion": "git push && git push --tags && npm run clean",
+    "prepublish": "npm run clean && npm run build"
   },
   "author": "fand",
   "license": "MIT",

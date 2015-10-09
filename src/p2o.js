@@ -84,7 +84,7 @@ const reposToFeed = (repos) => {
  * @param {string} outputFilePath
  */
 const renderOPML = (data, outputFilePath) => {
-  return fs.readFile(`${__dirname}/template.xml`, 'utf8')
+  return fs.readFile(`${__dirname}/../.template.xml`, 'utf8')
     .then((template) => Mustache.render(template, data))
     .then((outputData) => fs.writeFile(outputFilePath, outputData, 'utf8'));
 };

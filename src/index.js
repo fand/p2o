@@ -5,26 +5,44 @@ var npm       = require('npm');
 var fs        = promisify('fs');
 var Mustache  = require('mustache');
 
+/**
+ * Extract package data from given 'package.json'.
+ * @param {string} jsonPath
+ * @return {object}
+ */
 var readPackageJson = function (jsonPath) {
   return fs.readFile(jsonPath, 'utf8')
     .then(function (file) {
       var pack = JSON.parse(file);
       return {
-        package   : pack,
-        proDeps   : pack.dependencies || {},
-        devDeps   : pack.devDependencies || {},
-        proRepos  : null,
-        devRepos  : null,
-        opmlTitle : pack.name + ' : Deps updates',
-        opmlOwner : pack.author,
+        package  : pack,
+        proDeps  : pack.dependencies || {},
+        devDeps  : pack.devDependencies || {},
+        proRepos : null,
+        devRepos : null,
+
+        view : {
+          opmlTitle : pack.name + ' : Deps updates',
+          opmlOwner : pack.author,
+          feeds     : null,
+        }
       };
     });
 };
 
+/**
+ * Init npm engine.
+ * @return {Promise}
+ */
 var loadNpm = function () {
   return promisify(npm.load)({});
 };
 
+/**
+ * Fetch repositories' info from deps list.
+ * @param {Array<dep>} deps
+ * @return {Promise<Repo>}
+ */
 var depsToRepos = function (deps) {
   return Promise.all(Object.keys(deps).map(function (depName) {
     return promisify(npm.commands.view)([depName, 'repository'], true)
@@ -35,6 +53,11 @@ var depsToRepos = function (deps) {
   }));
 };
 
+/**
+ * Extract feeds info from repos.
+ * @param {Array<Repo>} repos
+ * @return {Array<Feed>}
+ */
 var reposToFeed = function (repos) {
   return repos.filter(function (repo) {
     if (repo.type !== 'git') { return false; }
@@ -55,6 +78,11 @@ var reposToFeed = function (repos) {
   });
 };
 
+/**
+ * Write OPML to given path.
+ * @param {object} data
+ * @param {string} outputFilePath
+ */
 var renderOPML = function (data, outputFilePath) {
   return fs.readFile(__dirname + '/template.xml', 'utf8')
     .then(function (template) {
@@ -65,11 +93,26 @@ var renderOPML = function (data, outputFilePath) {
     });
 };
 
-var writeOPML = function (path, data) {
-  return fs.writeFile(path, data, 'utf8');
+/**
+ * Prepare repos array for environment.
+ * @param {string} mode
+ * @param {Array<Repo>} proRepos
+ * @param {Array<Repo>} devRepos
+ */
+var reposForMode = function (mode, proRepos, devRepos) {
+  if (mode === 'all') {
+    return proRepos.concat(devRepos);
+  }
+  if (mode === 'pro') {
+    return proRepos;
+  }
+  if (mode === 'all') {
+    return devRepos;
+  }
 };
 
 /**
+ * Main function
  * @param {string} packageFilePath
  * @param {string} outputFilePath
  * @param {string} mode
@@ -94,21 +137,11 @@ module.exports = function (packageFilePath, outputFilePath, mode) {
       });
     })
     .then(function () {
-      // 引数によってrepoを変える
-      if (mode === 'all') {
-        pkg.repos = pkg.proRepos.concat(pkg.devRepos);
-      }
-      if (mode === 'pro') {
-        pkg.repos = pkg.proRepos;
-      }
-      if (mode === 'all') {
-        pkg.repos = pkg.devRepos;
-      }
-
-      pkg.feeds = reposToFeed(pkg.repos);
+      var repos = reposForMode(mode, pkg.proRepos, pkg.devRepos);
+      pkg.view.feeds = reposToFeed(repos);
     })
     .then(function () {
-      return renderOPML(pkg, outputFilePath);
+      return renderOPML(pkg.view, outputFilePath);
     })
     .catch(function (err) {
       throw err;

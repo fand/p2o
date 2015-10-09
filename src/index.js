@@ -122,7 +122,7 @@ module.exports = function (packageFilePath, outputFilePath, mode) {
 
   var pkg;
 
-  readPackageJson(packageFilePath)
+  return readPackageJson(packageFilePath)
     .then(function (res) {
       pkg = res;
     })

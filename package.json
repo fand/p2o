@@ -1,0 +1,15 @@
+{
+  "name": "packagejson2opml",
+  "version": "0.0.1",
+  "description": "Generates OPML from package.json",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "fand",
+  "license": "MIT",
+  "dependencies": {
+    "mustache": "^2.1.3",
+    "promisify-node": "^0.2.1"
+  }
+}

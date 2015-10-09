@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<opml version="1.0">
+  <head>
+    <title>{{ opmlTitle }}</title>
+    <ownerName>{{ opmlOwner }}</ownerName>
+  </head>
+  <body>
+    {{#feeds}}
+      <outline
+        title="{{title}}"
+        htmlUrl="{{&htmlUrl}}"
+        type="rss"
+        xmlUrl="{{&xmlUrl}}" />
+    {{/feeds}}
+  </body>
+</opml>

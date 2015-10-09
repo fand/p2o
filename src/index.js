@@ -66,7 +66,7 @@ fs.readFile(packageFilePath, 'utf8')
       var m = repo.url.match(/github\.com[\/\:](.*)\/(.*)\.git$/);
       var userName = m[1];
       var repoName = m[2];
-      var htmlUrl = 'http://github.com/' + userName + '/' + repoName;
+      var htmlUrl = 'https://github.com/' + userName + '/' + repoName;
       var xmlUrl = htmlUrl + '/releases.atom';
       return {
         title   : repoName,

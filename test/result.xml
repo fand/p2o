@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<opml version="1.0">
+  <head>
+    <title>yo : Deps updates</title>
+    <ownerName></ownerName>
+  </head>
+  <body>
+      <outline
+        title="babelify"
+        htmlUrl="https://github.com/babel/babelify"
+        type="rss"
+        xmlUrl="https://github.com/babel/babelify/releases.atom" />
+      <outline
+        title="node-browserify"
+        htmlUrl="https://github.com/substack/node-browserify"
+        type="rss"
+        xmlUrl="https://github.com/substack/node-browserify/releases.atom" />
+      <outline
+        title="react"
+        htmlUrl="https://github.com/facebook/react"
+        type="rss"
+        xmlUrl="https://github.com/facebook/react/releases.atom" />
+      <outline
+        title="watchify"
+        htmlUrl="https://github.com/substack/watchify"
+        type="rss"
+        xmlUrl="https://github.com/substack/watchify/releases.atom" />
+      <outline
+        title="mocha"
+        htmlUrl="https://github.com/mochajs/mocha"
+        type="rss"
+        xmlUrl="https://github.com/mochajs/mocha/releases.atom" />
+      <outline
+        title="power-assert"
+        htmlUrl="https://github.com/power-assert-js/power-assert"
+        type="rss"
+        xmlUrl="https://github.com/power-assert-js/power-assert/releases.atom" />
+      <outline
+        title="Sinon.JS"
+        htmlUrl="https://github.com/cjohansen/Sinon.JS"
+        type="rss"
+        xmlUrl="https://github.com/cjohansen/Sinon.JS/releases.atom" />
+  </body>
+</opml>

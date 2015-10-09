@@ -5,12 +5,15 @@
   "main": "index.js",
   "bin": "./bin/cli.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "$(npm bin)/mocha test"
   },
   "author": "fand",
   "license": "MIT",
   "dependencies": {
     "mustache": "^2.1.3",
     "promisify-node": "^0.2.1"
+  },
+  "devDependencies": {
+    "mocha": "^2.3.3"
   }
 }

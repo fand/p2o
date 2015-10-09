@@ -4,6 +4,22 @@
   "description": "Generates OPML from package.json",
   "main": "src/p2o.js",
   "bin": "./bin/cli.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fand/p2o.git"
+  },
+  "keywords": [
+    "package.json",
+    "deps",
+    "dependency",
+    "opml",
+    "rss",
+    "feed",
+  ],
+  "bugs": {
+    "url": "https://github.com/fand/p2o/issues"
+  },
+  "homepage": "https://github.com/fand/p2o",
   "scripts": {
     "test": "$(npm bin)/mocha test",
     "build": "$(npm bin)/babel src --out-dir lib",
